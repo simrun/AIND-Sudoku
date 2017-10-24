@@ -1,12 +1,14 @@
 import solution
 import unittest
 
-IMPOSSIBLE_SUDOKU_GRID = '.................................................................................'
 
 class TestSearch(unittest.TestCase):
+    IMPOSSIBLE_SUDOKU_GRID = '11...............................................................................'
+
     def test_solve(self):
-        self.assertFalse(solution.solve(IMPOSSIBLE_SUDOKU_GRID), "Didn't fail on impossible sudoku grid")
+        self.assertFalse(solution.solve(self.IMPOSSIBLE_SUDOKU_GRID), "Didn't fail on impossible sudoku grid")
         pass
+
 
 class TestNakedTwins(unittest.TestCase):
     before_naked_twins_1 = {'I6': '4', 'H9': '3', 'I2': '6', 'E8': '1', 'H3': '5', 'H7': '8', 'I7': '1', 'I4': '8',
@@ -82,7 +84,6 @@ class TestNakedTwins(unittest.TestCase):
                         "Your naked_twins function produced an unexpected board.")
 
 
-
 class TestDiagonalSudoku(unittest.TestCase):
     diagonal_grid = '2.............62....1....7...6..8...3...9...7...6..4...4....8....52.............3'
     solved_diag_sudoku = {'G7': '8', 'G6': '9', 'G5': '7', 'G4': '3', 'G3': '2', 'G2': '4', 'G1': '6', 'G9': '5',
@@ -99,6 +100,7 @@ class TestDiagonalSudoku(unittest.TestCase):
 
     def test_solve(self):
         self.assertEqual(solution.solve(self.diagonal_grid), self.solved_diag_sudoku)
+
 
 if __name__ == '__main__':
     unittest.main()
