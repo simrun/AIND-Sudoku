@@ -126,7 +126,7 @@ def search(values):
         newvalues[searchbox] = v
         newvalues = search(newvalues)
         if newvalues: return newvalues
-    #TODO should probably return false here if we didn't find a solution
+    return False
 
 def solve(grid):
     """
