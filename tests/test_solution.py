@@ -1,6 +1,12 @@
 import solution
 import unittest
 
+IMPOSSIBLE_SUDOKU_GRID = '.................................................................................'
+
+class TestSearch(unittest.TestCase):
+    def test_solve(self):
+        self.assertFalse(solution.solve(IMPOSSIBLE_SUDOKU_GRID), "Didn't fail on impossible sudoku grid")
+        pass
 
 class TestNakedTwins(unittest.TestCase):
     before_naked_twins_1 = {'I6': '4', 'H9': '3', 'I2': '6', 'E8': '1', 'H3': '5', 'H7': '8', 'I7': '1', 'I4': '8',
