@@ -48,7 +48,23 @@ def naked_twins(values):
     """
 
     # Find all instances of naked twins
-    # Eliminate the naked twins as possibilities for their peers
+    for unit in unitlist:
+        twin_boxes = [box for box in unit if len(values[box]) == 2]
+
+        twin_values = {values[box]: [] for box in twin_boxes}
+        for box in twin_boxes:
+            twin_values[values[box]].append(box)
+
+        twin_values = {v: twin_values[v] for v in twin_values.keys() if len(twin_values[v]) == 2}
+
+        # Eliminate the naked twins as possibilities for their peers
+        for vs, twin in twin_values.items():
+            others = (set(peers[twin[0]])-set([twin[1]])) & set(unit)
+            for o in others:
+                values[o] = values[o].replace(vs[0], '')
+                values[o] = values[o].replace(vs[1], '')
+
+    return values
 
 def grid_values(grid):
     """
@@ -104,10 +120,10 @@ def reduce_puzzle(values):
         # Check how many boxes have a determined value
         solved_values_before = len([box for box in values.keys() if len(values[box]) == 1])
 
-        # Your code here: Use the Eliminate Strategy
         values = eliminate(values)
-        # Your code here: Use the Only Choice Strategy
         values = only_choice(values)
+        values = naked_twins(values)
+
         # Check how many boxes have a determined value, to compare
         solved_values_after = len([box for box in values.keys() if len(values[box]) == 1])
         # If no new values were added, stop the loop.
