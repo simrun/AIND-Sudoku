@@ -1,27 +1,29 @@
 rows = 'ABCDEFGHI'
 cols = '123456789'
 
-def cross(A, B):
+
+def cross(a, b):
     "Cross product of elements in A and elements in B."
-    return [s+t for s in A for t in B]
+    return [s + t for s in a for t in b]
+
 
 boxes = cross(rows, cols)
 
 row_units = [cross(r, cols) for r in rows]
 column_units = [cross(rows, c) for c in cols]
-square_units = [cross(rs, cs) for rs in ('ABC','DEF','GHI') for cs in ('123','456','789')]
+square_units = [cross(rs, cs) for rs in ('ABC', 'DEF', 'GHI') for cs in ('123', '456', '789')]
 
-diagonal_unit_1 = [rows[i]+cols[i] for i in range(len(rows))]
-diagonal_unit_2 = [rows[-1-i]+cols[i] for i in range(len(rows))]
+diagonal_unit_1 = [rows[i] + cols[i] for i in range(len(rows))]
+diagonal_unit_2 = [rows[-1 - i] + cols[i] for i in range(len(rows))]
 diagonal_units = [diagonal_unit_1, diagonal_unit_2]
 
 unitlist = row_units + column_units + square_units + diagonal_units
 
 units = dict((s, [u for u in unitlist if s in u]) for s in boxes)
-peers = dict((s, set(sum(units[s],[]))-set([s])) for s in boxes)
-
+peers = dict((s, set(sum(units[s], [])) - set([s])) for s in boxes)
 
 assignments = []
+
 
 def assign_value(values, box, value):
     """
@@ -37,6 +39,7 @@ def assign_value(values, box, value):
     if len(value) == 1:
         assignments.append(values.copy())
     return values
+
 
 def naked_twins(values):
     """Eliminate values using the naked twins strategy.
@@ -59,12 +62,13 @@ def naked_twins(values):
 
         # Eliminate the naked twins as possibilities for their peers
         for vs, twin in twin_values.items():
-            others = (set(peers[twin[0]])-set([twin[1]])) & set(unit)
+            others = (set(peers[twin[0]]) - set([twin[1]])) & set(unit)
             for o in others:
                 values[o] = values[o].replace(vs[0], '')
                 values[o] = values[o].replace(vs[1], '')
 
     return values
+
 
 def grid_values(grid):
     """
@@ -79,9 +83,11 @@ def grid_values(grid):
     d = {}
     for i in range(81):
         d[boxes[i]] = grid[i]
-        if d[boxes[i]] == '.': d[boxes[i]] = '123456789'
+        if d[boxes[i]] == '.':
+            d[boxes[i]] = '123456789'
 
     return d
+
 
 def display(values):
     """
@@ -97,22 +103,27 @@ def display(values):
         if r in 'CF': print(line)
     return
 
+
 def eliminate(values):
     for box, value in values.items():
-        if len(value) != 1: continue
+        if len(value) != 1:
+            continue
 
         for peer in peers[box]:
             values[peer] = values[peer].replace(value, '')
 
     return values
 
+
 def only_choice(values):
     for unit in unitlist:
         for i in '123456789':
             iboxes = [box for box in unit if i in values[box]]
-            if len(iboxes) == 1: values[iboxes[0]] = i
+            if len(iboxes) == 1:
+                values[iboxes[0]] = i
 
     return values
+
 
 def reduce_puzzle(values):
     stalled = False
@@ -133,23 +144,28 @@ def reduce_puzzle(values):
             return False
     return values
 
+
 def search(values):
     values = reduce_puzzle(values)
-    if values == False: return False
-    # if all(len(values[box]) == 1 for box in boxes): return values
+    if values is False:
+        return False
     # Choose one of the unfilled squares with the fewest possibilities
-    for i in range(2,10):
+    for i in range(2, 10):
         unfilled = [box for box in boxes if len(values[box]) == i]
-        if unfilled: break
-        if i == 9: return values
+        if unfilled:
+            break
+        if i == 9:
+            return values
     searchbox = unfilled[0]
     # Now use recursion to solve each one of the resulting sudokus, and if one returns a value (not False), return that answer!
     for v in values[searchbox]:
         newvalues = values.copy()
         newvalues[searchbox] = v
         newvalues = search(newvalues)
-        if newvalues: return newvalues
+        if newvalues:
+            return newvalues
     return False
+
 
 def solve(grid):
     """
@@ -162,12 +178,14 @@ def solve(grid):
     """
     return search(grid_values(grid))
 
+
 if __name__ == '__main__':
     diag_sudoku_grid = '2.............62....1....7...6..8...3...9...7...6..4...4....8....52.............3'
     display(solve(diag_sudoku_grid))
 
     try:
         from visualize import visualize_assignments
+
         visualize_assignments(assignments)
 
     except SystemExit:
