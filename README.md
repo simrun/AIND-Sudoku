@@ -3,11 +3,11 @@
 
 # Question 1 (Naked Twins)
 Q: How do we use constraint propagation to solve the naked twins problem?  
-A: *Student should provide answer here*
+A: We apply the naked_twins() strategy each time we reduce a puzzle. This loops over each unit in the sudoku. We first find the naked twins (values and boxes); this is represented by the twin_values dict. For each naked twin we find their peers and remove the two values from their possibilities.
 
 # Question 2 (Diagonal Sudoku)
 Q: How do we use constraint propagation to solve the diagonal sudoku problem?  
-A: *Student should provide answer here*
+A: Since our reduction strategies (naked twins, only choice, eliminate) are written using unitlist, all we have to do is add the diagonal units to this list.
 
 ### Install
 
