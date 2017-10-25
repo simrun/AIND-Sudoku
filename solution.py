@@ -34,7 +34,12 @@ def naked_twins(values):
 
         twin_values = {v: twin_values[v] for v in twin_values.keys() if len(twin_values[v]) == 2}
 
-        # TODO: Eliminate the naked twins as possibilities for their peers
+        # Eliminate the naked twins as possibilities for their peers
+        for vs, twin in twin_values.items():
+            others = (set(peers[twin[0]])-set([twin[1]])) & set(unit)
+            for o in others:
+                values[o] = values[o].replace(vs[0], '')
+                values[o] = values[o].replace(vs[1], '')
 
     return values
 
